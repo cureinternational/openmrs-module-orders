@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<module configVersion="1.2">
+
+	<!-- Base Module Properties -->
+	<id>${project.parent.artifactId}</id>
+	<name>${project.parent.name}</name>
+	<version>${project.parent.version}</version>
+	<package>${MODULE_PACKAGE}</package>
+	<author>CURE International</author>
+	<description>${project.parent.description}</description>
+
+	<require_modules>
+		<require_module>org.openmrs.module.webservices.rest</require_module>
+		<require_module>org.bahmni.module.bahmni-events</require_module>
+		<require_module>org.openmrs.module.fhir2</require_module>
+	</require_modules>
+
+	<activator>org.openmrs.module.orders.api.OrdersActivator</activator>
+</module>
