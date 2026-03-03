@@ -4,6 +4,7 @@
 .classpath
 .talismanrc
 target
+.serena
 
 # Package Files #
 *.jar
