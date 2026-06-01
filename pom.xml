@@ -259,9 +259,17 @@
 			</snapshots>
 		</repository>
 		<repository>
-			<id>openmrs-repo</id>
+			<id>openmrs-repo</id> 
 			<name>OpenMRS Nexus Repository</name>
 			<url>https://mavenrepo.openmrs.org/nexus/content/repositories/public</url>
+		</repository>
+		<repository>
+			<id>github</id>
+			<name>GitHub Packages - openmrs-module-fhir2</name>
+			<url>https://maven.pkg.github.com/cureinternational/openmrs-module-fhir2</url>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
 		</repository>
 	</repositories>
 
