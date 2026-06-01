@@ -45,7 +45,7 @@
 		<mockitoVersion>3.5.11</mockitoVersion>
 		<argLine>-Xmx1024m</argLine>
 		<lombokVersion>1.18.26</lombokVersion>
-		<openmrsFhir2Version>2.5.0</openmrsFhir2Version>
+		<openmrsFhir2Version>2.5.0.ipd-SNAPSHOT</openmrsFhir2Version>
 		<bahmniVersion>1.2.0</bahmniVersion>
 		<bahmniEventsVersion>1.0.0-SNAPSHOT</bahmniEventsVersion>
 	</properties>

@@ -19,7 +19,7 @@ public class HibernateOrderTaskDao implements OrderTaskDao {
 		Criteria criteria = sessionFactory.getCurrentSession()
 				.createCriteria(FhirTask.class)
 				.createAlias("basedOnReferences", "bor")
-				.add(Restrictions.eq("bor.targetUuid", orderUuid))
+				.add(Restrictions.eq("bor.reference", "ServiceRequest/" + orderUuid))
 				.setMaxResults(1);
 		return (FhirTask) criteria.uniqueResult();
 	}
