@@ -81,13 +81,13 @@ public class OrderTaskServiceImplTest {
 	}
 
 	@Test
-	public void shouldSetTaskStatusToRequested() {
+	public void shouldSetTaskStatusToDraftOnNewOrder() {
 		when(orderTaskDao.getTaskByOrderUuid(ORDER_UUID)).thenReturn(null);
 
 		orderTaskService.createTaskForOrderIfNotExists(orderContext);
 
 		FhirTask task = captureSavedTask();
-		assertEquals(FhirTask.TaskStatus.REQUESTED, task.getStatus());
+		assertEquals(FhirTask.TaskStatus.DRAFT, task.getStatus());
 	}
 
 	@Test

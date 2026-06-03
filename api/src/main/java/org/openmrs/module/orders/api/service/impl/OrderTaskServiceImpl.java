@@ -52,7 +52,7 @@ public class OrderTaskServiceImpl implements OrderTaskService {
 		FhirTask task = new FhirTask();
 		task.setUuid(UUID.randomUUID().toString());
 		task.setName(buildTaskName(orderContext));
-		task.setStatus(FhirTask.TaskStatus.REQUESTED);
+		task.setStatus(FhirTask.TaskStatus.DRAFT);
 		task.setIntent(FhirTask.TaskIntent.ORDER);
 
 		task.setForReference(buildReference(RESOURCE_PATIENT, orderContext.getPatientUuid()));
