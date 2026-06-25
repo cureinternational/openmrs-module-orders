@@ -2,6 +2,8 @@ package org.openmrs.module.orders.api.service.impl;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.openmrs.Concept;
+import org.openmrs.api.ConceptService;
 import org.openmrs.module.fhir2.model.FhirReference;
 import org.openmrs.module.fhir2.model.FhirTask;
 import org.openmrs.module.orders.api.dao.OrderTaskDao;
@@ -19,13 +21,20 @@ public class OrderTaskServiceImpl implements OrderTaskService {
 	private static final String RESOURCE_SERVICE_REQUEST = "ServiceRequest";
 	private static final String RESOURCE_ENCOUNTER = "Encounter";
 	private static final String REFERENCE_FORMAT = "%s/%s";
+	private static final String ORDER_FULFILLMENT_CONCEPT_NAME = "ORDER_FULFILLMENT";
 
 	private final Log log = LogFactory.getLog(this.getClass());
 
 	private OrderTaskDao orderTaskDao;
 
+	private ConceptService conceptService;
+
 	public void setOrderTaskDao(OrderTaskDao orderTaskDao) {
 		this.orderTaskDao = orderTaskDao;
+	}
+
+	public void setConceptService(ConceptService conceptService) {
+		this.conceptService = conceptService;
 	}
 
 	@Override
@@ -59,6 +68,13 @@ public class OrderTaskServiceImpl implements OrderTaskService {
 		task.setEncounterReference(buildReference(RESOURCE_ENCOUNTER, orderContext.getEncounterUuid()));
 		task.setBasedOnReferences(Collections.singleton(
 				buildReference(RESOURCE_SERVICE_REQUEST, orderContext.getOrderUuid())));
+
+		Concept orderFulfillmentConcept = conceptService.getConceptByName(ORDER_FULFILLMENT_CONCEPT_NAME);
+		if (orderFulfillmentConcept != null) {
+			task.setTaskCode(orderFulfillmentConcept);
+		} else {
+			log.warn("ORDER_FULFILLMENT concept not found, task_code will not be set for order: " + orderContext.getOrderUuid());
+		}
 
 		return task;
 	}

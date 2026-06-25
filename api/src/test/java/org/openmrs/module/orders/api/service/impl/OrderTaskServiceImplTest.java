@@ -5,6 +5,8 @@ import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.openmrs.Concept;
+import org.openmrs.api.ConceptService;
 import org.openmrs.module.fhir2.model.FhirReference;
 import org.openmrs.module.fhir2.model.FhirTask;
 import org.openmrs.module.orders.api.dao.OrderTaskDao;
@@ -23,10 +25,14 @@ public class OrderTaskServiceImplTest {
 	@Mock
 	private OrderTaskDao orderTaskDao;
 
+	@Mock
+	private ConceptService conceptService;
+
 	private static final String ORDER_UUID = "order-uuid-123";
 	private static final String PATIENT_UUID = "patient-uuid-456";
 	private static final String ENCOUNTER_UUID = "encounter-uuid-789";
 	private static final String CONCEPT_DISPLAY = "Complete Blood Count";
+	private static final String ORDER_FULFILLMENT_CONCEPT_NAME = "ORDER_FULFILLMENT";
 
 	private OrderContext orderContext;
 
@@ -35,6 +41,7 @@ public class OrderTaskServiceImplTest {
 		MockitoAnnotations.initMocks(this);
 		orderTaskService = new OrderTaskServiceImpl();
 		orderTaskService.setOrderTaskDao(orderTaskDao);
+		orderTaskService.setConceptService(conceptService);
 
 		when(orderTaskDao.saveTask(any(FhirTask.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
@@ -78,6 +85,29 @@ public class OrderTaskServiceImplTest {
 
 		FhirTask task = captureSavedTask();
 		assertEquals("Order Status Tracking Task", task.getName());
+	}
+
+	@Test
+	public void shouldSetTaskCodeToOrderFulfillmentConcept() {
+		when(orderTaskDao.getTaskByOrderUuid(ORDER_UUID)).thenReturn(null);
+		Concept orderFulfillmentConcept = new Concept();
+		when(conceptService.getConceptByName(ORDER_FULFILLMENT_CONCEPT_NAME)).thenReturn(orderFulfillmentConcept);
+
+		orderTaskService.createTaskForOrderIfNotExists(orderContext);
+
+		FhirTask task = captureSavedTask();
+		assertEquals(orderFulfillmentConcept, task.getTaskCode());
+	}
+
+	@Test
+	public void shouldNotSetTaskCodeWhenOrderFulfillmentConceptNotFound() {
+		when(orderTaskDao.getTaskByOrderUuid(ORDER_UUID)).thenReturn(null);
+		when(conceptService.getConceptByName(ORDER_FULFILLMENT_CONCEPT_NAME)).thenReturn(null);
+
+		orderTaskService.createTaskForOrderIfNotExists(orderContext);
+
+		FhirTask task = captureSavedTask();
+		assertNull(task.getTaskCode());
 	}
 
 	@Test
