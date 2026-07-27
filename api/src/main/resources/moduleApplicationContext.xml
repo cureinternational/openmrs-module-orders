@@ -28,6 +28,7 @@
     <!-- Service Beans -->
     <bean id="orderTaskServiceImpl" class="org.openmrs.module.orders.api.service.impl.OrderTaskServiceImpl">
         <property name="orderTaskDao" ref="hibernateOrderTaskDao"/>
+        <property name="conceptService" ref="conceptService"/>
     </bean>
     <bean id="orderTaskService" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
         <property name="transactionManager" ref="transactionManager"/>
